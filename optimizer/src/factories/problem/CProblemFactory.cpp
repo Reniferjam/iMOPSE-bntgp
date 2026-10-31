@@ -7,6 +7,7 @@
 #include "TSP/CTSPFactory.h"
 #include "MSRA/MSRAReader.h"
 #include "ECVRPTW/CECVRPTWFactory.h"
+#include "CVRPTW/CCVRPTWFactory.h"
 
 AProblem* CProblemFactory::CreateProblem(const char* problemName, const char* problemConfigurationPath)
 {
@@ -22,6 +23,7 @@ AProblem* CProblemFactory::CreateProblem(const char* problemName, const char* pr
     if (strcmp(problemName, "CVRP") == 0) return CCVRPFactory::CreateCVRP(problemConfigurationPath);
     if (strcmp(problemName, "MSRA") == 0) return CMSRAReader::CreateMSRA(problemConfigurationPath);
     if (strcmp(problemName, "ECVRPTW") == 0) return CECVRPTWFactory::CreateECVRPTW(problemConfigurationPath);
+    if (strcmp(problemName, "CVRPTW") == 0) return CCVRPTWFactory::CreateCVRPTW(problemConfigurationPath);
     
     throw std::runtime_error("Problem name: " + std::string(problemName) + " not supported");
 }
