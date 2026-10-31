@@ -72,7 +72,7 @@ namespace bntgp::gp {
             if (count == 0) throw std::invalid_argument("BNTGP: feature mask is empty");
         }
     };
-    inline thread_local ActiveGPFeatures CurrentGPFeatures{};
+    extern thread_local ActiveGPFeatures CurrentGPFeatures;
     inline void configureGPFeatures(const GPFeatureMask& mask) {CurrentGPFeatures.set(mask);}
     [[nodiscard]] inline FeatureId sampleActiveGPFeature(std::mt19937& randomEngine) {
         std::uniform_int_distribution<int> distribution(0, static_cast<int>(CurrentGPFeatures.count) - 1);

@@ -3,6 +3,10 @@
 #include "FeatureCatalog.hpp"
 #include "GPFeatureMask.hpp"
 
+namespace bntgp::gp {
+    thread_local ActiveGPFeatures CurrentGPFeatures{};
+}
+
 #include <algorithm>
 #include <cassert>
 #include <array>
