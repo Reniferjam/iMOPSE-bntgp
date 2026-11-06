@@ -77,6 +77,7 @@ namespace bntgp_cvrptw::decoding::cvrptw
                 f[FeatureId::WAIT]            = sol.WaitingTime(cu) / horizon_;
                 f[FeatureId::CUR_TIME]        = sol.GetCurrentTime() / horizon_;
                 f[FeatureId::UNROUTED_RATIO]  = static_cast<double>(remaining) / n;
+                //TODO There are some discrepancies between features used here and those used in the Rust version
 
                 double score = gp::evaluateTree(tree, f);
                 if (!std::isfinite(score))
@@ -119,7 +120,7 @@ namespace bntgp_cvrptw::decoding::cvrptw
 
         sol.CloseRoute();
 
-        // Objectives (both minimized): vehicles, total distance.
+        // Objectives (both minimized): vehicles, total distance.   //TODO should be total delay and total distance
         // Unserved customers are penalized so infeasible solutions are always dominated.
         const int    unserved = sol.GetUnservedCount();
         const double vehicles = static_cast<double>(sol.GetVehiclesUsed())
@@ -168,3 +169,4 @@ namespace bntgp_cvrptw::decoding::cvrptw
         return evaluation;
     }
 }
+//TODO for correct (?) route generation and evaluation refer to Rust version -> src/genetic_programming/route_generation.rs -> generate_routes_from_mo_syntax_tree() and evaluate_mo_routes()

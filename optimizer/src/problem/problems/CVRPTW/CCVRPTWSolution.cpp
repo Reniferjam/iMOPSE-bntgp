@@ -102,6 +102,11 @@ float CCVRPTWSolution::Slack(std::size_t customerIdx) const
     return m_Template->GetCities()[customerIdx].m_DueTime - ArrivalTime(customerIdx);
 }
 
+float CCVRPTWSolution::Delay(std::size_t customerIdx) const
+{
+    return std::max(0.f, ArrivalTime(customerIdx) - m_Template->GetCities()[customerIdx].m_DueTime);
+}
+
 float CCVRPTWSolution::StartOfServiceTime(std::size_t customerIdx) const
 {
     return std::max(ArrivalTime(customerIdx), m_Template->GetCities()[customerIdx].m_ReadyTime);
