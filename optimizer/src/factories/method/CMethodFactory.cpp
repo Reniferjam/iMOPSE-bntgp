@@ -43,6 +43,9 @@ AMethod* CMethodFactory::CreateMethod( const char* optimizerConfigPath, AProblem
 	if (methodName == "BNTGP")
         return CBNTGPFactory::CreateBNTGP(configMap, problem, initialization);
 
+	if (methodName == "BNTGP_CVRPTW")
+		return CBNTGPFactory::CreateBNTGPCVRPTW(configMap, problem, initialization);
+
 	if (methodName == "GPHH_ECVRPTW")
 		return CGPHH_ECVRPTWFactory::CreateGPHH(configMap, problem);
 

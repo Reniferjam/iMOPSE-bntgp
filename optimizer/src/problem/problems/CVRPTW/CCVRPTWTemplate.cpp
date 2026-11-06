@@ -1,5 +1,7 @@
 #include "CCVRPTWTemplate.h"
 #include <algorithm>
+#include <cfloat>
+#include <cmath>
 #include <iostream>
 #include <numeric>
 

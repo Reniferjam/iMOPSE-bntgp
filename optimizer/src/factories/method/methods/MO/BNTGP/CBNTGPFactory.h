@@ -14,4 +14,11 @@ public:
         AProblem* problem,
         AInitialization* initialization
     );
+
+    [[nodiscard]]
+    static AMethod* CreateBNTGPCVRPTW(
+        SConfigMap* configuration,
+        AProblem* problem,
+        AInitialization* initialization
+    );
 };
