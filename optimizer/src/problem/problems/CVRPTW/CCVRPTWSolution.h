@@ -25,6 +25,7 @@ public:
     [[nodiscard]] float ArrivalTime(std::size_t customerIdx) const;
     [[nodiscard]] float WaitingTime(std::size_t customerIdx) const;
     [[nodiscard]] float Slack(std::size_t customerIdx) const;
+    [[nodiscard]] float Delay(size_t customerIdx) const;    //TODO this is our second objective
     [[nodiscard]] float StartOfServiceTime(std::size_t customerIdx) const;
 
     bool Serve(std::size_t customerIdx);
@@ -36,6 +37,7 @@ public:
 
     // ---- results ----
     [[nodiscard]] float GetTotalDistance() const { return m_TotalDistance; }
+    //TODO GetTotalDelay
     [[nodiscard]] int GetUnservedCount() const { return (int)m_Unserved.size(); }
     [[nodiscard]] const std::vector<int>& GetUnserved() const { return m_Unserved; }
     [[nodiscard]] float GetTotalDuration() const;   // sum of route end times
@@ -49,12 +51,14 @@ private:
 
     std::vector<std::vector<int>> m_Routes;
     std::vector<float> m_RouteEndTimes;
-    std::vector<int> m_Unserved;
+    std::vector<int> m_Unserved;    //TODO All clients should be served or else the solution should be considered infeasible
 
     bool m_RouteOpen = false;
     std::size_t m_CurrentPosition = 0;
     int m_CurrentLoad = 0;
     float m_CurrentTime = 0.f;
-
+    //TODO somewhere here should probably be m_TotalDelay
     float m_TotalDistance = 0.f;
+
+
 };

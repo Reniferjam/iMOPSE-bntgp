@@ -147,6 +147,9 @@ namespace bntgp_cvrptw
                 : nullptr
             );
 
+            // printf("\nGeneration %zu archive size: %zu",generation, archive_.size());
+            // TODO Right now archive size is always =1, should be >1 unless (in extremely rare cases) the solution is absolutely perfect or dominates all other solutions
+
             if (trace != nullptr)
             {
                 assert(

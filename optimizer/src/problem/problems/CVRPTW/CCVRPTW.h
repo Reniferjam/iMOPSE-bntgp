@@ -22,9 +22,9 @@ public:
     CCVRPTWTemplate* GetCVRPTWTemplate() { return m_CVRPTWTemplate; }
     std::vector<int> GetRealPath(AIndividual& individual);
 
-    float ComputeFitness(float totalDistance, int vehiclesUsed) const;
+    float ComputeFitness(float totalDistance, int vehiclesUsed) const;  //TODO should be float totalDistance, int totalDelay
 
-    void Normalize(float fitness, int unservedCount, float& normFitness, float& normUnserved) const;
+    void Normalize(float fitness, int unservedCount, float& normFitness, float& normUnserved) const; //TODO again int totalDelay instead of unservedCount
 
 protected:
     SProblemEncoding m_ProblemEncoding;
