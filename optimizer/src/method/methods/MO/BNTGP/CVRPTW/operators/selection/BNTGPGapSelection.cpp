@@ -142,13 +142,21 @@ namespace bntgp_cvrptw
         {
             if (!archive.empty())
             {
-                selectedParents_.push_back({
-                    0U,
-                    0U,
-                    BNTGPObjective::Makespan,
-                    0.0,
-                    0.0
-                });
+                const std::size_t pairCount =
+                    requiredParentPairCount(populationSize);
+
+                selectedParents_.reserve(pairCount);
+
+                for (std::size_t i = 0U; i < pairCount; ++i)
+                {
+                    selectedParents_.push_back({
+                        0U,
+                        0U,
+                        BNTGPObjective::Makespan,
+                        0.0,
+                        0.0
+                    });
+                }
             }
 
             return selectedParents_;
