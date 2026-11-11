@@ -9,19 +9,23 @@ namespace bntgp_cvrptw::gp
     // CVRPTW candidate-customer features (all normalized by the decoder).
     enum class FeatureId : std::uint8_t
     {
-        DIST_CUR,         // d(current position, customer)
-        DIST_DEPOT,       // d(customer, depot)
-        DEMAND,           // demand / capacity
-        REM_CAP,          // remaining capacity / capacity
-        DEMAND_OVER_REM,  // demand / remaining capacity
-        READY,            // ready time / horizon
-        DUE,              // due time / horizon
-        SERVICE,          // service time / horizon
-        TW_WIDTH,         // (due - ready) / horizon
-        SLACK,            // (due - arrival) / horizon
-        WAIT,             // max(0, ready - arrival) / horizon
-        CUR_TIME,         // current vehicle time / horizon
-        UNROUTED_RATIO,   // unrouted customers / n
+        DEMAND,                // demand / capacity
+        DISTANCE,              // d(current, customer) / max edge
+        REMAINING_CAPACITY,    // remaining capacity / capacity
+        DISTANCE_FROM_DEPOT,   // d(depot, customer) / max edge
+        CUSTOMERS_LEFT,        // unserved customers / (customers + depot)
+        VEHICLES_LEFT,         // (fleet - routes closed) / fleet   (can be negative)
+
+        REF_CENTER_DISTANCE,   // distance to the centre of the bounding box
+        REF_Q1_DISTANCE,       // distance to the centre of the (min x, min y) quadrant
+        REF_Q2_DISTANCE,       // ... (min x, max y)
+        REF_Q3_DISTANCE,       // ... (max x, max y)
+        REF_Q4_DISTANCE,       // ... (max x, min y)
+
+        CURRENT_TIME,          // current vehicle time / max due time
+        TRAVEL_TIME,           // d(current, customer) / max due time
+        WAITING_TIME,          // max(0, ready - arrival) / max due time
+        DELAY,                 // max(0, arrival - due) / max due time
 
         COUNT
     };
@@ -64,7 +68,7 @@ namespace bntgp_cvrptw::gp
         NodeIndex left{ InvalidNodeIndex };
         NodeIndex right{ InvalidNodeIndex };
 
-        FeatureId feature{ FeatureId::DIST_CUR };
+        FeatureId feature{ FeatureId::DEMAND };
         NodeKind kind{ NodeKind::CONST };
         UnaryOp unaryOperation{ UnaryOp::NEG };
         BinaryOp binaryOperation{ BinaryOp::ADD };

@@ -45,7 +45,7 @@ namespace bntgp_cvrptw::gp
                     case BinaryOp::ADD: return a + b;
                     case BinaryOp::SUB: return a - b;
                     case BinaryOp::MUL: return a * b;
-                    case BinaryOp::DIV: return std::fabs(b) < 1e-9 ? 1.0 : a / b; // protected division
+                    case BinaryOp::DIV: return b == 0.0 ? 0.0 : a / b;
                     case BinaryOp::MIN: return std::min(a, b);
                     case BinaryOp::MAX: return std::max(a, b);
                 }

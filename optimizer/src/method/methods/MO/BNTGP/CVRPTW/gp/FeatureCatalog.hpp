@@ -10,19 +10,21 @@ namespace bntgp_cvrptw::gp
 {
     inline constexpr std::array<FeatureId, FeatureCount>
         FeatureSamplingOrder{
-            FeatureId::DIST_CUR,
-            FeatureId::DIST_DEPOT,
             FeatureId::DEMAND,
-            FeatureId::REM_CAP,
-            FeatureId::DEMAND_OVER_REM,
-            FeatureId::READY,
-            FeatureId::DUE,
-            FeatureId::SERVICE,
-            FeatureId::TW_WIDTH,
-            FeatureId::SLACK,
-            FeatureId::WAIT,
-            FeatureId::CUR_TIME,
-            FeatureId::UNROUTED_RATIO
+            FeatureId::DISTANCE,
+            FeatureId::REMAINING_CAPACITY,
+            FeatureId::DISTANCE_FROM_DEPOT,
+            FeatureId::CUSTOMERS_LEFT,
+            FeatureId::VEHICLES_LEFT,
+            FeatureId::REF_CENTER_DISTANCE,
+            FeatureId::REF_Q1_DISTANCE,
+            FeatureId::REF_Q2_DISTANCE,
+            FeatureId::REF_Q3_DISTANCE,
+            FeatureId::REF_Q4_DISTANCE,
+            FeatureId::CURRENT_TIME,
+            FeatureId::TRAVEL_TIME,
+            FeatureId::WAITING_TIME,
+            FeatureId::DELAY
     };
 
     [[nodiscard]]
@@ -62,19 +64,21 @@ namespace bntgp_cvrptw::gp
     {
         switch (feature)
         {
-        case FeatureId::DIST_CUR:        return "D_CUR";
-        case FeatureId::DIST_DEPOT:      return "D_DEPOT";
-        case FeatureId::DEMAND:          return "DEM";
-        case FeatureId::REM_CAP:         return "REM_CAP";
-        case FeatureId::DEMAND_OVER_REM: return "DEM_REM";
-        case FeatureId::READY:           return "READY";
-        case FeatureId::DUE:             return "DUE";
-        case FeatureId::SERVICE:         return "SERVICE";
-        case FeatureId::TW_WIDTH:        return "TW_W";
-        case FeatureId::SLACK:           return "SLACK";
-        case FeatureId::WAIT:            return "WAIT";
-        case FeatureId::CUR_TIME:        return "T_NOW";
-        case FeatureId::UNROUTED_RATIO:  return "UNROUTED";
+        case FeatureId::DEMAND:              return "DEM";
+        case FeatureId::DISTANCE:            return "DIST";
+        case FeatureId::REMAINING_CAPACITY:  return "REM_CAP";
+        case FeatureId::DISTANCE_FROM_DEPOT: return "D_DEPOT";
+        case FeatureId::CUSTOMERS_LEFT:      return "CUST_LEFT";
+        case FeatureId::VEHICLES_LEFT:       return "VEH_LEFT";
+        case FeatureId::REF_CENTER_DISTANCE: return "REF_C";
+        case FeatureId::REF_Q1_DISTANCE:     return "REF_Q1";
+        case FeatureId::REF_Q2_DISTANCE:     return "REF_Q2";
+        case FeatureId::REF_Q3_DISTANCE:     return "REF_Q3";
+        case FeatureId::REF_Q4_DISTANCE:     return "REF_Q4";
+        case FeatureId::CURRENT_TIME:        return "T_NOW";
+        case FeatureId::TRAVEL_TIME:         return "TRAVEL";
+        case FeatureId::WAITING_TIME:        return "WAIT";
+        case FeatureId::DELAY:               return "DELAY";
         case FeatureId::COUNT:
             break;
         }

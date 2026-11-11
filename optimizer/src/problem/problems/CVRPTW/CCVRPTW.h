@@ -4,6 +4,14 @@
 #include "../../AProblem.h"
 #include <vector>
 
+class CCVRPTWSolution;
+
+struct SCVRPTWObjectives
+{
+    float distance{ 0.f };   // objective 1: total distance + fleet penalty
+    float delay{ 0.f };      // objective 2: total delay    + fleet penalty
+};
+
 class CCVRPTW : public AProblem
 {
 public:
@@ -22,9 +30,19 @@ public:
     CCVRPTWTemplate* GetCVRPTWTemplate() { return m_CVRPTWTemplate; }
     std::vector<int> GetRealPath(AIndividual& individual);
 
-    float ComputeFitness(float totalDistance, int vehiclesUsed) const;  //TODO should be float totalDistance, int totalDelay
+    // objective 1: totalDistance + FLEET_PENALTY per route above the fleet size
+    float ComputeFitness(float totalDistance, int vehiclesUsed) const;
 
-    void Normalize(float fitness, int unservedCount, float& normFitness, float& normUnserved) const; //TODO again int totalDelay instead of unservedCount
+    // objective 2: totalDelay + FLEET_PENALTY per route above the fleet size
+    float ComputeDelay(float totalDelay, int vehiclesUsed) const;
+
+    // Both objectives of a built solution (unserved customers are penalized too).
+    [[nodiscard]] SCVRPTWObjectives GetObjectives(const CCVRPTWSolution& solution) const;
+
+    void Normalize(float fitness, float delay, float& normFitness, float& normDelay) const;
+
+    [[nodiscard]] float GetMinObjectiveValue(int objective) const { return m_MinObjectiveValues[objective]; }
+    [[nodiscard]] float GetMaxObjectiveValue(int objective) const { return m_MaxObjectiveValues[objective]; }
 
 protected:
     SProblemEncoding m_ProblemEncoding;

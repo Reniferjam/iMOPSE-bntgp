@@ -12,22 +12,30 @@ public:
 
     void Reset();
 
+    // Capacity-based split of a permutation (delimiter / invalid id = new route).
     void Build(const std::vector<int>& permutation);
+
+    // Replays ready-made routes. Depot ids (0) inside a route are ignored,
+    // every route implicitly starts and ends at the depot.
+    void BuildFromRoutes(const std::vector<std::vector<int>>& routes);
 
     void StartRoute();
     void CloseRoute();
     [[nodiscard]] bool IsRouteOpen() const { return m_RouteOpen; }
 
     [[nodiscard]] bool FitsCapacity(std::size_t customerIdx) const;
+
+    // Hard-window helpers, not used by the soft-window model but kept for callers that need them.
     [[nodiscard]] bool CanArriveInTime(std::size_t customerIdx) const;
     [[nodiscard]] bool CanServe(std::size_t customerIdx) const { return FitsCapacity(customerIdx) && CanArriveInTime(customerIdx); }
 
     [[nodiscard]] float ArrivalTime(std::size_t customerIdx) const;
     [[nodiscard]] float WaitingTime(std::size_t customerIdx) const;
     [[nodiscard]] float Slack(std::size_t customerIdx) const;
-    [[nodiscard]] float Delay(size_t customerIdx) const;    //TODO this is our second objective
+    [[nodiscard]] float Delay(std::size_t customerIdx) const;   // max(0, arrival - due)
     [[nodiscard]] float StartOfServiceTime(std::size_t customerIdx) const;
 
+    // Serves the customer if the capacity allows it (late arrival is fine, it is only penalized).
     bool Serve(std::size_t customerIdx);
     void MarkUnserved(std::size_t customerIdx);
 
@@ -37,7 +45,8 @@ public:
 
     // ---- results ----
     [[nodiscard]] float GetTotalDistance() const { return m_TotalDistance; }
-    //TODO GetTotalDelay
+    [[nodiscard]] float GetTotalDelay() const { return m_TotalDelay; }
+    [[nodiscard]] bool IsFeasible() const { return m_Unserved.empty(); }
     [[nodiscard]] int GetUnservedCount() const { return (int)m_Unserved.size(); }
     [[nodiscard]] const std::vector<int>& GetUnserved() const { return m_Unserved; }
     [[nodiscard]] float GetTotalDuration() const;   // sum of route end times
@@ -51,14 +60,13 @@ private:
 
     std::vector<std::vector<int>> m_Routes;
     std::vector<float> m_RouteEndTimes;
-    std::vector<int> m_Unserved;    //TODO All clients should be served or else the solution should be considered infeasible
+    std::vector<int> m_Unserved;
 
     bool m_RouteOpen = false;
     std::size_t m_CurrentPosition = 0;
-    int m_CurrentLoad = 0;
+    int m_CurrentLoad = 0;      // remaining capacity of the open route
     float m_CurrentTime = 0.f;
-    //TODO somewhere here should probably be m_TotalDelay
+
     float m_TotalDistance = 0.f;
-
-
+    float m_TotalDelay = 0.f;
 };

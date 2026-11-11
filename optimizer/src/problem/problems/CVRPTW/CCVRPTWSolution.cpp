@@ -23,6 +23,7 @@ void CCVRPTWSolution::Reset()
     m_CurrentLoad = 0;
     m_CurrentTime = 0.f;
     m_TotalDistance = 0.f;
+    m_TotalDelay = 0.f;
 }
 
 void CCVRPTWSolution::Build(const std::vector<int>& permutation)
@@ -48,10 +49,27 @@ void CCVRPTWSolution::Build(const std::vector<int>& permutation)
         {
             StartRoute(); // capacity exhausted: closes the current route, opens a fresh one
         }
-        Serve(customer);  // skipped and recorded as unserved if the vehicle cannot make it in time
+        Serve(customer);  // always served; lateness only adds to the delay
     }
 
     CloseRoute();
+}
+
+void CCVRPTWSolution::BuildFromRoutes(const std::vector<std::vector<int>>& routes)
+{
+    Reset();
+    const int nodeCount = (int)m_Template->GetCitiesSize();
+
+    for (const auto& route : routes)
+    {
+        StartRoute();
+        for (int value : route)
+        {
+            if (value <= 0 || value >= nodeCount) continue;   // depot / invalid ids are skipped
+            Serve((std::size_t)value);
+        }
+        CloseRoute();                                         // an empty route is dropped here
+    }
 }
 
 void CCVRPTWSolution::StartRoute()
@@ -80,8 +98,10 @@ void CCVRPTWSolution::CloseRoute()
         return;
     }
 
+    // return leg: distance, time, and lateness against the depot due time
     m_TotalDistance += m_Template->GetDistance(m_CurrentPosition, CVRPTW_DEPOT_IDX);
     m_CurrentTime += m_Template->GetTravelTime(m_CurrentPosition, CVRPTW_DEPOT_IDX);
+    m_TotalDelay += std::max(0.f, m_CurrentTime - m_Template->GetDepotDueTime());
 
     m_RouteEndTimes.push_back(m_CurrentTime);
     m_CurrentPosition = CVRPTW_DEPOT_IDX;
@@ -137,15 +157,16 @@ bool CCVRPTWSolution::Serve(std::size_t customerIdx)
         StartRoute();
     }
 
-    if (!CanServe(customerIdx))
+    if (!FitsCapacity(customerIdx))
     {
-        MarkUnserved(customerIdx);
+        MarkUnserved(customerIdx);   // only possible if demand > capacity: infeasible instance
         return false;
     }
 
     const auto& city = m_Template->GetCities()[customerIdx];
 
     m_TotalDistance += m_Template->GetDistance(m_CurrentPosition, customerIdx);
+    m_TotalDelay += Delay(customerIdx);
     m_CurrentTime = StartOfServiceTime(customerIdx) + city.m_ServiceTime; // wait if early
     m_CurrentLoad -= city.m_Demand;
     m_CurrentPosition = customerIdx;

@@ -13,9 +13,10 @@ namespace bntgp_cvrptw::gp {
     using GPFeatureMask = std::array<bool, FeatureCount>;
 
     inline constexpr std::array<std::string_view, FeatureCount> GPFeatureNames{
-        "DIST_CUR", "DIST_DEPOT", "DEMAND", "REM_CAP", "DEMAND_OVER_REM",
-        "READY", "DUE", "SERVICE", "TW_WIDTH", "SLACK", "WAIT", "CUR_TIME",
-        "UNROUTED_RATIO"
+        "DEMAND", "DISTANCE", "REMAINING_CAPACITY", "DISTANCE_FROM_DEPOT",
+        "CUSTOMERS_LEFT", "VEHICLES_LEFT", "REF_CENTER_DISTANCE", "REF_Q1_DISTANCE",
+        "REF_Q2_DISTANCE", "REF_Q3_DISTANCE", "REF_Q4_DISTANCE", "CURRENT_TIME",
+        "TRAVEL_TIME", "WAITING_TIME", "DELAY"
     };
 
     [[nodiscard]] inline GPFeatureMask allGPFeatures() {
@@ -60,7 +61,7 @@ namespace bntgp_cvrptw::gp {
     struct ActiveGPFeatures {
         std::array<FeatureId, FeatureCount> ordered{};
         std::size_t count{0};
-        constexpr ActiveGPFeatures() noexcept = default;
+        ActiveGPFeatures() { set(defaultGPFeatures()); }
         void set(const GPFeatureMask& mask) {
             count = 0;
             for (auto feature : FeatureSamplingOrder)
